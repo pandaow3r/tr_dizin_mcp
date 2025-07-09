@@ -38,6 +38,43 @@ def search_tr_dizin_articles(query: str) -> Dict[str, Any]:
     except Exception as e:
         return {"error": f"Beklenmeyen hata: {str(e)}"}
 
+def extract_article_title(source: Dict[str, Any]) -> str:
+    """
+    Makale kaynağından başlığı çıkarır. Farklı başlık alanlarını kontrol eder.
+
+    Args:
+        source: Makale kaynak verisi (_source)
+
+    Returns:
+        Makale başlığı
+    """
+    # 1. Öncelik: abstracts[0].title (en doğru başlık)
+    abstracts = source.get("abstracts", [])
+    if abstracts and isinstance(abstracts, list) and len(abstracts) > 0:
+        first_abstract = abstracts[0]
+        if isinstance(first_abstract, dict) and "title" in first_abstract:
+            title = first_abstract["title"]
+            if title and title.strip():
+                return title.strip()
+
+    # 2. İkinci seçenek: orderTitle (boşluklar kaldırılmış olabilir)
+    order_title = source.get("orderTitle", "")
+    if order_title and order_title.strip():
+        return order_title.strip()
+
+    # 3. Üçüncü seçenek: title alanı (varsa)
+    title = source.get("title", "")
+    if title and title.strip():
+        return title.strip()
+
+    # 4. Son seçenek: Diğer title içeren alanları kontrol et
+    for key, value in source.items():
+        if "title" in key.lower() and isinstance(value, str) and value.strip():
+            return value.strip()
+
+    # Hiçbir başlık bulunamazsa
+    return "Başlık bulunamadı"
+
 def process_article_data(api_response: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
     TR Dizin API'sinden gelen ham veriyi işleyip düzenli formata çevirir.
@@ -64,12 +101,23 @@ def process_article_data(api_response: Dict[str, Any]) -> List[Dict[str, Any]]:
         for item in hits:
             source = item.get("_source", {})
 
+            # Başlığı doğru şekilde çıkar
+            title = extract_article_title(source)
+
+            # Abstract'ı çıkar (abstracts[0].abstract)
+            abstract = ""
+            abstracts = source.get("abstracts", [])
+            if abstracts and isinstance(abstracts, list) and len(abstracts) > 0:
+                first_abstract = abstracts[0]
+                if isinstance(first_abstract, dict) and "abstract" in first_abstract:
+                    abstract = first_abstract["abstract"] or ""
+
             # Makale bilgilerini çıkar
             article = {
-                "title": source.get("title", "Başlık bulunamadı"),
+                "title": title,
                 "authors": source.get("authors", []),
                 "year": source.get("year", source.get("publicationYear", "")),
-                "abstract": source.get("abstract", ""),
+                "abstract": abstract,
                 "doi": source.get("doi", ""),
                 "url": source.get("url", ""),
                 "journal": source.get("journal", ""),
