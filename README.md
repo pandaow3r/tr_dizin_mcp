@@ -1,4 +1,4 @@
-# 🚀 MCP Server Template
+# 🔬 TR Dizin MCP Server
 
 <div align="center">
 
@@ -7,11 +7,11 @@
 ![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 ![Smithery](https://img.shields.io/badge/Smithery-Deploy%20Ready-orange.svg)
 
-**A production-ready Python MCP (Model Context Protocol) server template**
+**TR Dizin akademik makale arama MCP serveri**
 
-*Deploy to Smithery and other MCP platforms with zero configuration!*
+*Türkiye'nin ulusal akademik veri tabanı TR Dizin'de makale arama yapın!*
 
-[🎯 Quick Start](#-quick-start) • [📦 Features](#-features) • [🚀 Deploy](#-deploy) • [🛠️ Customize](#️-customize)
+[🎯 Quick Start](#-quick-start) • [📦 Features](#-features) • [🚀 Deploy](#-deploy) • [🛠️ Tools](#️-tools)
 
 </div>
 
@@ -19,12 +19,13 @@
 
 ## ✨ Features
 
-- 🎯 **Zero-Config Deployment** - Ready for Smithery and other MCP platforms
-- 🐍 **Modern Python** - Built with Python 3.11+ and FastMCP
-- 🐳 **Docker Ready** - Containerized for easy deployment
-- 🔧 **Template Structure** - Perfect starting point for your MCP tools
-- 📝 **Well Documented** - Clear examples and best practices
-- ⚡ **Fast Setup** - Get your MCP server running in minutes
+- 🔬 **TR Dizin Integration** - Türkiye'nin ulusal akademik veri tabanına doğrudan erişim
+- 📚 **Academic Search** - Konu, yazar ve anahtar kelime bazında makale arama
+- 🎯 **5 Makale Limit** - En alakalı 5 makaleyi getirir
+- 🐍 **Modern Python** - Python 3.11+ ve FastMCP ile geliştirildi
+- 🐳 **Docker Ready** - Konteyner tabanlı kolay deployment
+- ⚡ **Fast API** - Hızlı ve güvenilir TR Dizin API entegrasyonu
+- 📊 **Structured Data** - JSON formatında düzenli makale verileri
 
 ## 🎯 Quick Start
 
@@ -64,44 +65,55 @@ mcp-template/
 └── 📖 README.md        # This beautiful documentation
 ```
 
-## 🛠️ Customize Your Tools
+## 🛠️ Available Tools
 
-### Adding New Tools
+### 1. search_articles
 
-1. **Implement your tool logic** in `app.py`:
-
-```python
-def myAwesomeTool(param: str) -> str:
-    """Your amazing tool implementation."""
-    # Add your logic here
-    return f"Processed: {param}"
-```
-
-2. **Register it in the MCP server** in `server.py`:
+TR Dizin veritabanında makale arar ve en alakalı 5 makaleyi döndürür.
 
 ```python
-@mcp.tool()
-async def my_awesome_tool(param: str) -> str:
-    """
-    Description of what your tool does.
-    """
-    result = myAwesomeTool(param)
-    return result
+# Kullanım örnekleri
+search_articles("yapay zeka")
+search_articles("makine öğrenmesi")
+search_articles("covid-19")
+search_articles("Ahmet Yılmaz")  # Yazar adı
 ```
 
-### Example Tool Structure
+**Parametre:**
+- `query` (str): Aranacak makale konusu, yazar adı veya anahtar kelime
 
-The template includes a dummy tool to get you started:
+**Döndürür:**
+- JSON formatında makale listesi
+- Her makale için: başlık, yazarlar, yıl, özet, DOI, URL, dergi, anahtar kelimeler
+
+### 2. get_article_info
+
+TR Dizin MCP server hakkında bilgi verir.
 
 ```python
-@mcp.tool()
-async def dummy_tool(param: str) -> str:
-    """
-    A sample tool that processes input parameters.
-    """
-    awesome_response = dummyTool(param)
-    return awesome_response
+get_article_info()
 ```
+
+**Döndürür:**
+- Server özellikleri
+- Kullanım örnekleri
+- API endpoint bilgileri
+
+## 📊 API Details
+
+- **Endpoint**: `https://search.trdizin.gov.tr/api/defaultSearch/publication/`
+- **Method**: GET
+- **Parameters**:
+  - `q`: Arama terimi (kullanıcı girişi)
+  - `order`: relevance-DESC (sabit)
+  - `page`: 1 (sabit)
+  - `limit`: 5 (sabit)
+
+## 🔍 Search Examples
+
+- **Konu arama**: "yapay zeka", "makine öğrenmesi", "blockchain"
+- **Yazar arama**: "Ahmet Yılmaz", "Fatma Demir"
+- **Anahtar kelime**: "covid-19", "eğitim", "sağlık"
 
 ## 🚀 Deploy
 
