@@ -1,4 +1,4 @@
-# 🔬 TR Dizin MCP Server
+# 🚀 MCP Server Template
 
 <div align="center">
 
@@ -7,11 +7,11 @@
 ![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 ![Smithery](https://img.shields.io/badge/Smithery-Deploy%20Ready-orange.svg)
 
-**TR Dizin akademik makale arama MCP serveri**
+**A production-ready Python MCP (Model Context Protocol) server template**
 
-*Türkiye'nin ulusal akademik veri tabanı TR Dizin'de makale arama ve analiz yapın!*
+*Deploy to Smithery and other MCP platforms with zero configuration!*
 
-[🎯 Quick Start](#-quick-start) • [📦 Features](#-features) • [🚀 Deploy](#-deploy) • [🛠️ Tools](#️-tools)
+[🎯 Quick Start](#-quick-start) • [📦 Features](#-features) • [🚀 Deploy](#-deploy) • [🛠️ Customize](#️-customize)
 
 </div>
 
@@ -19,13 +19,12 @@
 
 ## ✨ Features
 
-- 🔬 **TR Dizin Integration** - Türkiye'nin ulusal akademik veri tabanına doğrudan erişim
-- 📚 **Academic Search** - Makale, yazar ve konu bazında gelişmiş arama
-- 🎯 **Zero-Config Deployment** - Smithery ve diğer MCP platformları için hazır
-- 🐍 **Modern Python** - Python 3.11+ ve FastMCP ile geliştirildi
-- 🐳 **Docker Ready** - Konteyner tabanlı kolay deployment
-- ⚡ **Fast API** - Hızlı ve güvenilir TR Dizin API entegrasyonu
-- 📊 **Structured Data** - JSON formatında düzenli makale verileri
+- 🎯 **Zero-Config Deployment** - Ready for Smithery and other MCP platforms
+- 🐍 **Modern Python** - Built with Python 3.11+ and FastMCP
+- 🐳 **Docker Ready** - Containerized for easy deployment
+- 🔧 **Template Structure** - Perfect starting point for your MCP tools
+- 📝 **Well Documented** - Clear examples and best practices
+- ⚡ **Fast Setup** - Get your MCP server running in minutes
 
 ## 🎯 Quick Start
 
@@ -36,8 +35,8 @@ Click the **"Use this template"** button at the top of this repository to create
 ### 2. Clone & Setup
 
 ```bash
-git clone https://github.com/yourusername/tr-dizin-mcp.git
-cd tr-dizin-mcp
+git clone https://github.com/yourusername/your-mcp-server.git
+cd your-mcp-server
 pip install -r requirements.txt
 ```
 
@@ -50,8 +49,7 @@ python server.py
 ### 4. Test Your Tools
 
 ```bash
-# TR Dizin MCP server is now running and ready to search academic articles!
-# Use the available tools: search_articles, get_article_summary, search_by_author
+# Your MCP server is now running and ready to accept connections!
 ```
 
 ## 📦 What's Included
@@ -66,47 +64,44 @@ mcp-template/
 └── 📖 README.md        # This beautiful documentation
 ```
 
-## 🛠️ Available Tools
+## 🛠️ Customize Your Tools
 
-### 1. search_articles
+### Adding New Tools
 
-TR Dizin veritabanında makale arar ve detaylı sonuçları döndürür.
-
-```python
-# Kullanım örneği
-search_articles("yapay zeka", page=1, limit=5)
-```
-
-**Parametreler:**
-- `query` (str): Arama yapılacak kelime veya kelime grubu
-- `page` (int): Sayfa numarası (varsayılan: 1)
-- `limit` (int): Döndürülecek maksimum sonuç sayısı (varsayılan: 5, maksimum: 20)
-
-### 2. get_article_summary
-
-Belirli bir konuda makale arayıp özet bilgiler döndürür.
+1. **Implement your tool logic** in `app.py`:
 
 ```python
-# Kullanım örneği
-get_article_summary("makine öğrenmesi", max_articles=3)
+def myAwesomeTool(param: str) -> str:
+    """Your amazing tool implementation."""
+    # Add your logic here
+    return f"Processed: {param}"
 ```
 
-**Parametreler:**
-- `query` (str): Arama yapılacak konu
-- `max_articles` (int): Özetlenecek maksimum makale sayısı (varsayılan: 3)
-
-### 3. search_by_author
-
-Belirli bir yazarın makalelerini arar.
+2. **Register it in the MCP server** in `server.py`:
 
 ```python
-# Kullanım örneği
-search_by_author("Ahmet Yılmaz", limit=5)
+@mcp.tool()
+async def my_awesome_tool(param: str) -> str:
+    """
+    Description of what your tool does.
+    """
+    result = myAwesomeTool(param)
+    return result
 ```
 
-**Parametreler:**
-- `author_name` (str): Yazar adı
-- `limit` (int): Döndürülecek maksimum sonuç sayısı (varsayılan: 5)
+### Example Tool Structure
+
+The template includes a dummy tool to get you started:
+
+```python
+@mcp.tool()
+async def dummy_tool(param: str) -> str:
+    """
+    A sample tool that processes input parameters.
+    """
+    awesome_response = dummyTool(param)
+    return awesome_response
+```
 
 ## 🚀 Deploy
 

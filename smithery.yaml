@@ -3,22 +3,8 @@ startCommand:
   configSchema:
     # JSON Schema defining the configuration options for the MCP.
     type: object
-    properties:
-      default_limit:
-        type: integer
-        description: "Varsayılan arama sonuç limiti"
-        default: 5
-        minimum: 1
-        maximum: 20
-      timeout:
-        type: integer
-        description: "API istek timeout süresi (saniye)"
-        default: 30
-        minimum: 5
-        maximum: 60
+    properties: {}
   commandFunction:
     |-
     (config) => ({ command: 'python', args: ['-m', 'server'] })
-  exampleConfig:
-    default_limit: 5
-    timeout: 30
+  exampleConfig: {}
